@@ -12,7 +12,7 @@ public class Path {
     }
 
     public static void main(String[] args) {
-        System.out.println(Path.getRootPath());
+
     }
 
     public static String getRootPath() {
