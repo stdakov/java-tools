@@ -21,7 +21,7 @@ public class Path {
         try {
             String mainClassFolder = Path.class.getProtectionDomain().getCodeSource().getLocation().getPath();
             mainClassFolder = URLDecoder.decode(mainClassFolder, "UTF-8");
-
+            mainClassFolder = mainClassFolder.replace('/', File.separatorChar);
             //here we check if the jar is compiled by IDE. By IDE we will not have "file:"... in the begging of the path
             if (mainClassFolder.contains("file:") && mainClassFolder.contains(".jar")) {
                 String regex = "file:(.*)[\\/\\\\].*\\.jar";
@@ -50,6 +50,6 @@ public class Path {
         }
 
         //windows OS is buggy and returns wrong separator character from ...getPath();
-        return jarPath.replace('/', File.separatorChar);
+        return jarPath;
     }
 }
