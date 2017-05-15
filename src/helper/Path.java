@@ -12,15 +12,24 @@ public class Path {
     }
 
     public static void main(String[] args) {
-
+        System.out.println(Path.getRootPath());
     }
 
     public static String getRootPath() {
+
         String jarPath = null;
+        Boolean isWindows = false;
+
+        // includes: Windows 2000,  Windows 95, Windows 98, Windows NT, Windows Vista, Windows XP
+        if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
+            isWindows = true;
+        }
 
         try {
             String mainClassFolder = Path.class.getProtectionDomain().getCodeSource().getLocation().getPath();
             mainClassFolder = URLDecoder.decode(mainClassFolder, "UTF-8");
+
+            //windows OS is buggy and returns wrong separator character from ...getPath();
             mainClassFolder = mainClassFolder.replace('/', File.separatorChar);
             //here we check if the jar is compiled by IDE. By IDE we will not have "file:"... in the begging of the path
             if (mainClassFolder.contains("file:") && mainClassFolder.contains(".jar")) {
@@ -30,26 +39,29 @@ public class Path {
                 while (matcher.find()) {
                     jarPath = matcher.group(1);
                 }
-
-                //if OS is windows we have to remove first char //\C:\... should be only //C:\...
-                //if (SystemUtils.IS_OS_WINDOWS) {
-                if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
-                    // includes: Windows 2000,  Windows 95, Windows 98, Windows NT, Windows Vista, Windows XP
-                    jarPath = jarPath.substring(1); //\C:\Users\Administrator\...
+            } else {
+                String spliter;
+                if (isWindows) {
+                    spliter = "\\\\classes\\\\";
+                } else {
+                    spliter = File.separator + "classes" + File.separator;
                 }
 
-            } else {
-                String[] paths = mainClassFolder.split(File.separator + "classes" + File.separator);
+                String[] paths = mainClassFolder.split(spliter);
+
                 if (paths.length > 0) {
                     jarPath = paths[0];
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        //windows OS is buggy and returns wrong separator character from ...getPath();
+        //if OS is windows we have to remove first char //\C:\... should be only //C:\...
+        if (isWindows && jarPath != null) {
+            jarPath = jarPath.substring(1);
+        }
+
         return jarPath;
     }
 }
