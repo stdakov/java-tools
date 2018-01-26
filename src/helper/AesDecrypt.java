@@ -23,7 +23,7 @@ public class AesDecrypt {
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
 
             byte[] encrypted = cipher.doFinal(value.getBytes());
-            String encryptedStr = Base64.getEncoder().encodeToString(encrypted)););
+            String encryptedStr = Base64.getEncoder().encodeToString(encrypted);
 
             return encryptedStr;
         } catch (Exception ex) {
