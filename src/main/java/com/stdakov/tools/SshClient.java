@@ -1,9 +1,11 @@
-package helper.ssh;
+package com.stdakov.tools;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -12,6 +14,8 @@ import java.util.Properties;
 
 public class SshClient {
 
+    private static final Logger logger = LoggerFactory.getLogger(SshClient.class);
+    
     protected Session session;
     protected ChannelShell channel;
     protected String username;
@@ -22,6 +26,7 @@ public class SshClient {
     protected boolean debug = false;
     protected String endCommand = "end-command";
     protected int connectionTimeout = 30000;
+    protected int commandDelay = 500;
 
     public SshClient() {
     }
@@ -58,6 +63,14 @@ public class SshClient {
         this.port = port;
     }
 
+    public int getCommandDelay() {
+        return commandDelay;
+    }
+
+    public void setCommandDelay(int commandDelay) {
+        this.commandDelay = commandDelay;
+    }
+
     public boolean isDebug() {
         return debug;
     }
@@ -92,7 +105,7 @@ public class SshClient {
     protected Session openSession() {
 
         if (this.debug) {
-            System.out.println("Opening a session");
+            logger.info("Opening a session");
         }
 
         if (this.hostname == null) {
@@ -126,11 +139,11 @@ public class SshClient {
             session.setConfig(config);
 
             if (this.debug) {
-                System.out.println("Connecting to " + this.hostname + " - Please wait for few seconds... ");
+                logger.info("Connecting to " + this.hostname + " - Please wait for few seconds... ");
             }
             session.connect(this.connectionTimeout);
             if (this.debug) {
-                System.out.println("Connected!");
+                logger.info("Connected!");
             }
 
             return session;
@@ -148,7 +161,7 @@ public class SshClient {
                 if (session != null) {
 
                     if (this.debug) {
-                        System.out.println("Open channel");
+                        logger.info("Open channel");
                     }
 
                     this.channel = (ChannelShell) session.openChannel("shell");
@@ -163,27 +176,12 @@ public class SshClient {
         }
     }
 
+    public void execute(List<String> commands) throws IllegalStateException {
 
-    public String execute(List<String> commands) {
-        String output = null;
-
-        try {
-            Channel channel = this.getChannel();
-            this.sendCommands(channel, commands);
-            output = this.readChannelOutput(channel);
-
-        } catch (Exception e) {
-            System.out.println("An error ocurred during executeCommands: " + e);
-            e.printStackTrace();
-        }
-
-        return output;
-    }
-
-    protected void sendCommands(Channel channel, List<String> commands) {
+        Channel channel = this.getChannel();
 
         if (this.debug) {
-            System.out.println("Sending commands...");
+            logger.info("Sending commands...");
         }
 
         try {
@@ -192,10 +190,10 @@ public class SshClient {
             }
             for (String command : commands) {
                 if (this.debug) {
-                    System.out.println("Sending command: " + command);
+                    logger.info("Sending command: " + command);
                 }
                 this.printStream.println(command);
-                Thread.sleep(500);
+                Thread.sleep(this.commandDelay);
             }
             this.printStream.flush();
         } catch (Exception e) {
@@ -203,14 +201,16 @@ public class SshClient {
         }
 
         if (this.debug) {
-            System.out.println("Finished sending commands!");
+            logger.info("Finished sending commands!");
         }
     }
 
-    protected String readChannelOutput(Channel channel) throws InterruptedException {
+    public String readOutput() throws InterruptedException {
+
+        Channel channel = this.getChannel();
 
         if (this.debug) {
-            System.out.println("Start reading output channel!");
+            logger.info("Start reading output channel!");
         }
 
         if (this.endCommand == null) {
@@ -265,7 +265,7 @@ public class SshClient {
         }
 
         if (this.debug) {
-            System.out.println("Disconnected channel and session");
+            logger.info("Disconnected channel and session");
         }
     }
 

@@ -1,4 +1,6 @@
-package helper;
+package com.stdakov.tools;
+
+import java.util.Optional;
 
 public class Hash {
     /**
@@ -6,7 +8,7 @@ public class Hash {
      * @param hashType MD5 OR SHA1
      * @return string hash of txt
      */
-    public static String getHash(String value, String hashType) {
+    protected static Optional<String> getHash(String value, String hashType) {
         String hash = null;
         try {
             java.security.MessageDigest md = java.security.MessageDigest.getInstance(hashType);
@@ -19,14 +21,14 @@ public class Hash {
         } catch (java.security.NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        return hash;
+        return Optional.ofNullable(hash);
     }
 
-    public static String md5(String value) {
+    public static Optional<String> md5(String value) {
         return Hash.getHash(value, "MD5");
     }
 
-    public static String sha1(String value) {
+    public static Optional<String> sha1(String value) {
         return Hash.getHash(value, "SHA1");
     }
 }

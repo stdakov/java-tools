@@ -1,18 +1,16 @@
-package helper;
+package com.stdakov.tools;
 
 import java.io.*;
 import java.util.Base64;
 
-public class ObjectToString {
+public class Base64Object {
 
     /**
      * Read the object from Base64 string.
      */
-    public static Object fromString(String s) throws IOException,
-            ClassNotFoundException {
+    public static Object fromString(String s) throws IOException, ClassNotFoundException {
         byte[] data = Base64.getDecoder().decode(s);
-        ObjectInputStream ois = new ObjectInputStream(
-                new ByteArrayInputStream(data));
+        ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
         Object o = ois.readObject();
         ois.close();
         return o;

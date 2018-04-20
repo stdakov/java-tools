@@ -1,4 +1,4 @@
-package helper;
+package com.stdakov.tools;
 
 import java.io.File;
 import java.net.URLDecoder;

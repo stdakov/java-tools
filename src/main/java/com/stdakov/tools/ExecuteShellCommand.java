@@ -1,4 +1,4 @@
-package helper.Cli;
+package com.stdakov.tools;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
