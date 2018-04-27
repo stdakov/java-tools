@@ -1,5 +1,8 @@
 package com.stdakov.tools;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
@@ -17,7 +20,7 @@ public class JwtTokenFactory {
         this.expSeconds = expSeconds;
     }
 
-    /*public String generate(Serializable object) throws IOException {
+    public String generate(Serializable object) throws IOException {
         String stringObject = Base64Object.toString(object);
         return Jwts.builder()
                 .setSubject(stringObject)
@@ -31,7 +34,7 @@ public class JwtTokenFactory {
 
         return Base64Object.fromString(stringObject);
     }
-*/
+
     private Date expirationSeconds(int seconds) {
         return new Date(System.currentTimeMillis() + (seconds * 1000));
     }
