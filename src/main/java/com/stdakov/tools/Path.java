@@ -7,15 +7,7 @@ import java.util.regex.Pattern;
 
 public class Path {
 
-    public Path() {
-
-    }
-
-    public static void main(String[] args) {
-        System.out.println(Path.getRootPath());
-    }
-
-    public static String getRootPath() {
+    public static String getRoot() {
 
         String jarPath = null;
         Boolean isWindows = false;
