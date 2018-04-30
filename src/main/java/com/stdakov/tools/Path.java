@@ -1,11 +1,22 @@
 package com.stdakov.tools;
 
 import java.io.File;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Path {
+
+    public static String getResource(String file) {
+        ClassLoader classLoader = Path.class.getClassLoader();
+        URL url = classLoader.getResource(file);
+        if (url == null) {
+            throw new IllegalArgumentException("Missing translation file: " + file);
+        }
+
+        return url.getPath();
+    }
 
     public static String getRoot() {
 
