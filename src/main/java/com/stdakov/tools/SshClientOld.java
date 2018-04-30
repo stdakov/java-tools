@@ -12,9 +12,9 @@ import java.io.PrintStream;
 import java.util.List;
 import java.util.Properties;
 
-public class SshClient {
+public class SshClientOld {
 
-    private static final Logger logger = LoggerFactory.getLogger(SshClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(SshClientOld.class);
     
     protected Session session;
     protected ChannelShell channel;
@@ -28,7 +28,7 @@ public class SshClient {
     protected int connectionTimeout = 30000;
     protected int commandDelay = 500;
 
-    public SshClient() {
+    public SshClientOld() {
     }
 
     public String getUsername() {

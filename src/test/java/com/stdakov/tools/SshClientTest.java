@@ -1,6 +1,5 @@
 package com.stdakov.tools;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ import java.util.List;
 public class SshClientTest {
     @Test
     public void testSsh() {
-        SshClient sshClient = new SshClient();
+        SshClientOld sshClient = new SshClientOld();
         sshClient.setDebug(true);
         sshClient.setHostname("127.0.0.1");
         sshClient.setConnectionTimeout(2000);
