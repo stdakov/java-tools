@@ -26,6 +26,7 @@ public class JwtTokenFactoryTest {
         String encrypted2 = jwtTokenFactory.generate(testDto);
 
         Assert.assertNotEquals(encrypted, encrypted2);
+        jwtTokenFactory.setPrivateKey("key1");
 
         TestDto decrypted = (TestDto) jwtTokenFactory.parse(encrypted);
         Assert.assertEquals(decrypted, testDto);
@@ -33,6 +34,7 @@ public class JwtTokenFactoryTest {
         Assert.assertEquals(property1, decrypted.getProperty1());
         Assert.assertEquals(property2, decrypted.getProperty2());
 
+        jwtTokenFactory.setPrivateKey("key2");
         TestDto decrypted2 = (TestDto) jwtTokenFactory.parse(encrypted2);
         Assert.assertEquals(decrypted2, testDto);
         Assert.assertEquals(decrypted2, decrypted);
@@ -42,7 +44,11 @@ public class JwtTokenFactoryTest {
         Assert.assertEquals(property2, decrypted2.getProperty2());
 
         Thread.sleep(10000);
+        try {
+            TestDto decryptedExpired = (TestDto) jwtTokenFactory.parse(encrypted);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-        TestDto decryptedExpired = (TestDto) jwtTokenFactory.parse(encrypted);
     }
 }
